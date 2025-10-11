@@ -14,8 +14,6 @@ const Page = async () => {
         <div className="w-full max-w-sm mx-auto space-y-6">
             <h1 className="text-2xl font-bold text-center mb-6">Sign In</h1>
 
-            <GithubSignIn />
-
             <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />

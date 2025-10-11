@@ -15,8 +15,6 @@ const Page = async () => {
                 Create Account
             </h1>
 
-            <GithubSignIn />
-
             <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />
@@ -36,6 +34,8 @@ const Page = async () => {
                     const res = await signUp(formData);
                     if (res.success) {
                         redirect("/sign-in");
+                    } else {
+                        alert(res.message);
                     }
                 }}
             >
