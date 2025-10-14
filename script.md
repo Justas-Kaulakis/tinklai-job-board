@@ -590,7 +590,7 @@ lets enhance things
 npm i zod
 
 ```ts src/lib/schema.ts
-const schema = z.object({
+const loginSchema= z.object({
   email: z.string().email(),
   password: z.string().min(1),
 });

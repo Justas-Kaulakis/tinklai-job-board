@@ -1,0 +1,146 @@
+import db from "@/lib/db";
+import { auth } from "@/lib/auth";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { MessageForm } from "@/components/MessageForm";
+import { formatDistanceToNow } from "date-fns";
+import { lt } from "date-fns/locale";
+import LoginPrompt from "@/components/LoginPrompt";
+
+type JobDetailsProps = { params: Promise<{ id: string }> };
+
+export default async function JobDetailsPage({ params }: JobDetailsProps) {
+    const session = await auth();
+    const userId = session?.user.id;
+    const postId = (await params).id;
+
+    const post = await db.jobPost.update({
+        where: { id: postId },
+        data: { views: { increment: 1 } },
+        include: {
+            author: { select: { id: true, name: true, email: true } },
+            messages: {
+                include: {
+                    sender: { select: { id: true, name: true, email: true } },
+                },
+                orderBy: { createdAt: "desc" },
+            },
+        },
+    });
+
+    if (!post) return notFound();
+
+    const isOwner = userId === post.authorId;
+
+    return (
+        <section className="max-w-3xl mx-auto space-y-6">
+            <header>
+                <h1 className="text-2xl font-semibold">{post.title}</h1>
+                <p className="text-gray-600 text-sm">
+                    {post.category === "OFFER"
+                        ? "Siūlau darbą"
+                        : "Ieškau darbo"}
+                </p>
+                <div className="text-sm text-gray-500">
+                    Autorius: {post.author?.name ?? "Nežinomas"}{" "}
+                    {post.author?.email && (
+                        <span className="text-gray-400">
+                            ({post.author.email})
+                        </span>
+                    )}
+                </div>
+                <div className="text-xs text-gray-400">
+                    <span>Peržiūros: {post.views} </span>
+                    <span>
+                        Paskelbta{" "}
+                        {formatDistanceToNow(new Date(post.createdAt), {
+                            addSuffix: true,
+                            locale: lt,
+                        })}
+                    </span>
+                </div>
+            </header>
+
+            {post.image && (
+                <div className="relative w-full h-64">
+                    <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        className="object-cover rounded-md"
+                    />
+                </div>
+            )}
+
+            <article className="prose max-w-none">
+                <p className="text-gray-800 whitespace-pre-line">
+                    {post.description}
+                </p>
+            </article>
+
+            <section className="mt-8">
+                <h2 className="text-lg font-semibold mb-2">Žinutės</h2>
+
+                {!session && (
+                    <p className="text-sm text-gray-500">
+                        Norėdami parašyti žinutę, <LoginPrompt />.
+                    </p>
+                )}
+
+                {session && !isOwner && <MessageForm postId={post.id} />}
+
+                {isOwner && (
+                    <p className="text-sm text-gray-500 mb-2">
+                        Jūs esate šio skelbimo autorius. Žemiau matysite gautas
+                        žinutes.
+                    </p>
+                )}
+
+                {post.messages.length === 0 && (
+                    <p className="text-sm text-gray-400 italic">
+                        Kol kas nėra jokių žinučių.
+                    </p>
+                )}
+
+                <ul className="space-y-3 mt-4">
+                    {post.messages.map((m) => (
+                        <li
+                            key={m.id}
+                            className={`border rounded p-3 ${
+                                m.senderId === userId
+                                    ? "bg-blue-50"
+                                    : "bg-gray-50"
+                            }`}
+                        >
+                            <div className="text-sm flex justify-between">
+                                <div>
+                                    <span className="font-medium">
+                                        {m.sender.name ?? "Nežinomas"}
+                                    </span>{" "}
+                                    <span className="text-gray-500 text-xs">
+                                        ({m.sender.email})
+                                    </span>
+                                </div>
+
+                                <span className="text-xs text-gray-400">
+                                    {formatDistanceToNow(
+                                        new Date(m.createdAt),
+                                        {
+                                            addSuffix: true,
+                                            locale: lt,
+                                        }
+                                    )}
+                                </span>
+                            </div>
+
+                            <p className="text-gray-800 text-sm whitespace-pre-line mt-1">
+                                {m.content}
+                            </p>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </section>
+    );
+}

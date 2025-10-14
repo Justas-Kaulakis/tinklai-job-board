@@ -1,17 +1,17 @@
-import NextAuth, { CredentialsSignin, DefaultSession } from "next-auth";
+import NextAuth, {
+    AuthError,
+    CredentialsSignin,
+    DefaultSession,
+} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import db from "./db";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { schema as loginSchema } from "./schema";
+import { loginSchema } from "./validation";
 import bcrypt from "bcryptjs";
 import z from "zod";
-import { v4 as uuid } from "uuid";
-import { encode } from "next-auth/jwt";
+import { RoleType } from "@/types/next-auth";
 
-const adapter = PrismaAdapter(db);
-
-export const { auth, handlers, signIn } = NextAuth({
-    adapter,
+export const { auth, handlers, signIn, signOut } = NextAuth({
+    session: { strategy: "jwt" },
     providers: [
         Credentials({
             credentials: {
@@ -31,7 +31,7 @@ export const { auth, handlers, signIn } = NextAuth({
                             "No user found or password missing for",
                             vCred.email
                         );
-                        throw new CredentialsSignin("Invalid credentials");
+                        return null;
                     }
 
                     const valid = await bcrypt.compare(
@@ -40,7 +40,7 @@ export const { auth, handlers, signIn } = NextAuth({
                     );
                     if (!valid) {
                         console.warn("Invalid password for", vCred.email);
-                        throw new CredentialsSignin("Invalid credentials");
+                        return null;
                     }
 
                     return {
@@ -48,66 +48,42 @@ export const { auth, handlers, signIn } = NextAuth({
                         name: user.name,
                         email: user.email,
                         image: user.image,
-                        role: user.role,
+                        role: user.role as RoleType,
                         canPost: user.canPost,
                     };
                 } catch (err) {
                     if (err instanceof z.ZodError) {
                         console.error("Zod validation failed:", err.message);
-                        throw new CredentialsSignin("Invalid input format");
+                        throw new CredentialsSignin(
+                            "Netinkamas prisijungimo formatas"
+                        );
                     }
+                    if (err instanceof CredentialsSignin) throw err;
+
                     console.error("Authorize error:", err);
-                    throw new CredentialsSignin("Login failed");
+                    throw new CredentialsSignin(
+                        "Ivyko klaida jungantis prie paskyros"
+                    );
                 }
             },
         }),
     ],
     callbacks: {
         async jwt({ token, user }) {
-            console.log("in jwt()");
-            console.log(token);
-            console.log(user);
             if (user) {
+                token.id = user.id;
                 token.role = user.role;
                 token.canPost = user.canPost;
-                token.credentials = true;
             }
             return token;
         },
-        async session({ session, user, token }) {
-            console.log("in session()");
-            console.log(session);
-            console.log(user);
-            console.log(token);
-            if (user) {
-                session.user.role = user.role;
-                session.user.canPost = user.canPost;
-            } else if (token) {
+        async session({ session, token }) {
+            if (session.user) {
+                session.user.id = token.id as string;
                 session.user.role = token.role || "CLIENT";
                 session.user.canPost = token.canPost || false;
             }
             return session;
-        },
-    },
-    jwt: {
-        encode: async function (params) {
-            if (params.token?.credentials) {
-                const sessionToken = uuid();
-
-                if (!params.token.sub) {
-                    throw new Error("No user ID found in token");
-                }
-                const createdSession = await adapter?.createSession?.({
-                    sessionToken: sessionToken,
-                    userId: params.token.sub,
-                    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-                });
-                if (!createdSession) {
-                    throw new Error("Failed to create session");
-                }
-                return sessionToken;
-            }
-            return encode(params);
         },
     },
 });
