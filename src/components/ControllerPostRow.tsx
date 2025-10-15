@@ -6,8 +6,16 @@ import { deleteJob } from "@/lib/actions/jobs";
 import { formatDistanceToNow } from "date-fns";
 import { lt } from "date-fns/locale";
 import Link from "next/link";
+import { Prisma } from "@prisma/client";
 
-export function ControllerPostRow({ post }: { post: any }) {
+export function ControllerPostRow({
+    post,
+}: {
+    post: Prisma.JobPostGetPayload<{
+        include: { author: { select: { name: true; email: true } } };
+        orderBy: { createdAt: "desc" };
+    }>;
+}) {
     const [isPending, startTransition] = useTransition();
 
     const handleDelete = () => {

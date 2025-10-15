@@ -44,7 +44,7 @@ export default async function EditJobPage({ params }: EditJobPageProps) {
                 initialValues={{
                     title: post.title,
                     description: post.description,
-                    category: post.category as any,
+                    category: post.category as "OFFER" | "WANTED",
                     expiresAt: post.expiresAt.toISOString().split("T")[0],
                     image: post.image,
                 }}

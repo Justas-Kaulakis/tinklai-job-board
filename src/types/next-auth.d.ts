@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
+import { DefaultUser } from "next-auth";
 import { JWT as NextAuthJWT } from "next-auth/jwt";
 
 type RoleType = "CLIENT" | "ADMIN" | "CONTROLLER";

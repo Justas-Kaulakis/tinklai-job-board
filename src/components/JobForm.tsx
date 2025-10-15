@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
@@ -170,6 +171,14 @@ export function JobForm({
                     onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
+                            const MAX_FILE_SIZE_MB = 5;
+                            if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                                toast.error(
+                                    `Failas per didelis (${MAX_FILE_SIZE_MB}MB max).`
+                                );
+                                e.target.value = "";
+                                return;
+                            }
                             const reader = new FileReader();
                             reader.onload = () =>
                                 setPreview(reader.result as string);

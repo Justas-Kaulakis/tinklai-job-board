@@ -11,6 +11,7 @@ import { jobSchema } from "../validation";
 import { processImageUpload } from "../image";
 import fs from "fs/promises";
 import path from "path";
+import { JobPost } from "@prisma/client";
 
 // ---------------------------
 // 🧩 Form-based actions
@@ -29,7 +30,7 @@ export async function createJobAction(
     _prevState: JobFormState,
     formData: FormData
 ): Promise<JobFormState> {
-    let newPost: any;
+    let newPost: JobPost | undefined;
     const result = await executeFormAction(
         formData,
         jobSchema,
@@ -61,7 +62,7 @@ export async function createJobAction(
             revalidatePath("/dashboard/posts");
         }
     );
-    if (result.ok && newPost.id)
+    if (result.ok && newPost?.id)
         return {
             ...result,
             newPostId: newPost.id,

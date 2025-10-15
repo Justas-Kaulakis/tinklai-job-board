@@ -3,8 +3,9 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { toggleCanPost, updateUserRole } from "@/lib/actions/admin";
+import { User } from "@prisma/client";
 
-export function AdminUserRow({ user }: { user: any }) {
+export function AdminUserRow({ user }: { user: User }) {
     const [isPending, startTransition] = useTransition();
 
     const handleToggle = () => {

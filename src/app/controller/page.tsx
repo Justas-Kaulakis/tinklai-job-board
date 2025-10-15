@@ -1,6 +1,5 @@
 import db from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { notFound } from "next/navigation";
 import { ControllerPostRow } from "@/components/ControllerPostRow";
 
 export default async function ControllerPage() {

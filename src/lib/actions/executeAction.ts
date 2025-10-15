@@ -14,7 +14,7 @@ export async function executeAction<T>({
     try {
         await actionFn();
         return { success: true, message: successMessage };
-    } catch (error: any) {
+    } catch (error) {
         if (isRedirectError(error)) throw error;
 
         if (error instanceof Error && error.message) {

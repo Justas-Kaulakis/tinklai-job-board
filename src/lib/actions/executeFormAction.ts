@@ -31,7 +31,7 @@ export async function executeFormAction<
 
         await handler(parsed.data);
         return { ok: true, message: "Veiksmas sėkmingas!" };
-    } catch (error: any) {
+    } catch (error) {
         console.error("❌ Form action error:", error);
         if (error instanceof CredentialsSignin)
             return {

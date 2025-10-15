@@ -1,6 +1,5 @@
 import db from "@/lib/db";
 import { auth } from "@/lib/auth";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MessageForm } from "@/components/MessageForm";
 import { formatDistanceToNow } from "date-fns";
