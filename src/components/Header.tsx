@@ -19,9 +19,6 @@ const Header = ({
                     <Link href="/" className="font-semibold">
                         JobBoard
                     </Link>
-                    <Link href="/jobs" className="text-sm hover:underline">
-                        Jobs
-                    </Link>
                     {isAuthed && (
                         <Link
                             href="/dashboard"
@@ -30,7 +27,7 @@ const Header = ({
                             Dashboard
                         </Link>
                     )}
-                    {(role === "CONTROLLER" || role === "ADMIN") && (
+                    {role === "CONTROLLER" /*|| role === "ADMIN"*/ && (
                         <Link
                             href="/controller"
                             className="text-sm hover:underline"
@@ -48,7 +45,7 @@ const Header = ({
                     {isAuthed ? (
                         <>
                             <span className="text-xs text-gray-600">
-                                {email} • {role}
+                                {email} • Rolė: {role}
                                 {role === "CLIENT" &&
                                     (canPost ? " • canPost" : " • read-only")}
                             </span>

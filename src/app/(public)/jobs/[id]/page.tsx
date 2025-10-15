@@ -7,6 +7,7 @@ import { MessageForm } from "@/components/MessageForm";
 import { formatDistanceToNow } from "date-fns";
 import { lt } from "date-fns/locale";
 import LoginPrompt from "@/components/LoginPrompt";
+import JobTypeTag from "@/components/JobTypeTag";
 
 type JobDetailsProps = { params: Promise<{ id: string }> };
 
@@ -37,21 +38,14 @@ export default async function JobDetailsPage({ params }: JobDetailsProps) {
         <section className="max-w-3xl mx-auto space-y-6">
             <header>
                 <h1 className="text-2xl font-semibold">{post.title}</h1>
-                <p className="text-gray-600 text-sm">
-                    {post.category === "OFFER"
-                        ? "Siūlau darbą"
-                        : "Ieškau darbo"}
-                </p>
-                <div className="text-sm text-gray-500">
-                    Autorius: {post.author?.name ?? "Nežinomas"}{" "}
-                    {post.author?.email && (
-                        <span className="text-gray-400">
-                            ({post.author.email})
-                        </span>
-                    )}
+                <JobTypeTag category={post.category} />
+                <div className="text-sm text-gray-500 mt-2">
+                    Autorius: {post.author?.email && post.author.email}
                 </div>
                 <div className="text-xs text-gray-400">
-                    <span>Peržiūros: {post.views} </span>
+                    {isOwner || session?.user.role === "CONTROLLER" ? (
+                        <span>Peržiūros: {post.views} </span>
+                    ) : null}
                     <span>
                         Paskelbta{" "}
                         {formatDistanceToNow(new Date(post.createdAt), {
@@ -98,7 +92,7 @@ export default async function JobDetailsPage({ params }: JobDetailsProps) {
                 )}
 
                 {post.messages.length === 0 && (
-                    <p className="text-sm text-gray-400 italic">
+                    <p className=" mt-4 text-sm text-gray-400 italic">
                         Kol kas nėra jokių žinučių.
                     </p>
                 )}

@@ -4,6 +4,7 @@ import db from "@/lib/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteJob } from "@/lib/actions/jobs";
+import JobTypeTag from "@/components/JobTypeTag";
 
 export default async function DashboardPage() {
     const session = await auth();
@@ -39,13 +40,17 @@ export default async function DashboardPage() {
                     </p>
                 </div>
 
-                {user.canPost && (
+                {user.canPost ? (
                     <Link
                         href="/dashboard/posts/new"
                         className="mt-4 sm:mt-0 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
                     >
                         + Naujas skelbimas
                     </Link>
+                ) : (
+                    <p className="mt-4 sm:mt-0 px-4 py-2 bg-red-100 rounded text-red-600 text-sm">
+                        Skelbti negalite
+                    </p>
                 )}
             </header>
 
@@ -89,15 +94,13 @@ export default async function DashboardPage() {
                                         {post.title}
                                     </h3>
                                     <p className="text-sm text-gray-600">
-                                        {post.category === "OFFER"
-                                            ? "Siūlau darbą"
-                                            : "Ieškau darbo"}{" "}
-                                        • galioja iki{" "}
+                                        galioja iki{" "}
                                         {new Date(
                                             post.expiresAt
                                         ).toLocaleDateString("lt-LT")}
                                     </p>
-                                    <p className="text-xs text-gray-400">
+                                    <JobTypeTag category={post.category} />
+                                    <p className="text-xs text-gray-400 pl-2 inline">
                                         Peržiūros: {post.views ?? 0}
                                     </p>
                                 </div>

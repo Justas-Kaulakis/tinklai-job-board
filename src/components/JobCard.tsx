@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { lt } from "date-fns/locale";
+import JobTypeTag from "./JobTypeTag";
 
 type JobCardProps = {
     id: string;
@@ -9,7 +10,7 @@ type JobCardProps = {
     description: string;
     category: string;
     authorName?: string | null;
-    views: number;
+    views?: number;
     expiresAt: Date;
 };
 
@@ -29,15 +30,7 @@ export function JobCard({
         >
             <div className="flex justify-between items-center mb-1">
                 <h2 className="text-lg font-semibold">{title}</h2>
-                <span
-                    className={`text-xs px-2 py-1 rounded ${
-                        category === "OFFER"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-blue-100 text-blue-700"
-                    }`}
-                >
-                    {category === "OFFER" ? "Siūlau darbą" : "Ieškau darbo"}
-                </span>
+                <JobTypeTag category={category} />
             </div>
 
             <p className="text-sm text-gray-700 line-clamp-2 mb-2">
@@ -47,15 +40,20 @@ export function JobCard({
             <div className="text-xs text-gray-500 flex justify-between">
                 <span>Autorius: {authorName ?? "Nežinomas"}</span>
                 <span>
-                    Galioja dar{" "}
-                    {formatDistanceToNow(expiresAt, {
-                        addSuffix: true,
-                        locale: lt,
-                    })}
+                    Galiojimas pasibaigs{" "}
+                    <b>
+                        {formatDistanceToNow(expiresAt, {
+                            addSuffix: true,
+                            locale: lt,
+                        })}
+                    </b>
                 </span>
             </div>
-
-            <div className="text-xs text-gray-400 mt-1">Peržiūros: {views}</div>
+            {views ? (
+                <div className="text-xs text-gray-400 mt-1">
+                    Peržiūros: {views}
+                </div>
+            ) : null}
         </Link>
     );
 }
