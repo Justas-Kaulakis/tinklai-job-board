@@ -73,34 +73,22 @@ export default async function HomePage({
                     <p className="text-gray-500">Nerasta jokių skelbimų.</p>
                 ) : (
                     <div className="grid pt-4 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        {posts.map((p) => {
-                            console.log(
-                                "p.id: ",
-                                p.id,
-                                ", userId: ",
-                                userId,
-                                ", p.authorId: ",
-                                p.authorId,
-                                ", isController: ",
-                                isController
-                            );
-                            return (
-                                <JobCard
-                                    key={p.id}
-                                    id={p.id}
-                                    title={p.title}
-                                    description={p.description}
-                                    category={p.category}
-                                    authorName={p.author?.name}
-                                    views={
-                                        userId === p.authorId || isController
-                                            ? p.views
-                                            : undefined
-                                    }
-                                    expiresAt={p.expiresAt}
-                                />
-                            );
-                        })}
+                        {posts.map((p) => (
+                            <JobCard
+                                key={p.id}
+                                id={p.id}
+                                title={p.title}
+                                description={p.description}
+                                category={p.category}
+                                authorName={p.author?.name}
+                                views={
+                                    userId === p.authorId || isController
+                                        ? p.views
+                                        : undefined
+                                }
+                                expiresAt={p.expiresAt}
+                            />
+                        ))}
                     </div>
                 )}
             </section>

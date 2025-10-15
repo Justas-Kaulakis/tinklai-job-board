@@ -1,4 +1,5 @@
 import { signOut } from "@/lib/auth";
+import Image from "next/image";
 import Link from "next/link";
 
 const Header = ({
@@ -17,7 +18,16 @@ const Header = ({
             <div className="container mx-auto px-4 h-14 flex items-center justify-between">
                 <nav className="flex items-center gap-4">
                     <Link href="/" className="font-semibold">
-                        JobBoard
+                        <div className="flex justify-around items-center ">
+                            <Image
+                                width="40"
+                                height="40"
+                                alt=""
+                                src="/job.png"
+                                className="mr-1 mt-[-10px]"
+                            />
+                            <span className="">Board</span>
+                        </div>
                     </Link>
                     {isAuthed && (
                         <Link

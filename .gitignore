@@ -42,3 +42,6 @@ next-env.d.ts
 
 
 */lib/db/data
+
+# uplaoded user images
+/public/uploads
