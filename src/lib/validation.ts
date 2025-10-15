@@ -39,4 +39,22 @@ export const jobSchema = z.object({
         },
         { message: "Nurodykite galiojančią ateities datą" }
     ),
+    image: z
+        .any()
+        .transform((file) => {
+            if (file instanceof File && file.size > 0) return file;
+            return undefined; // treat empty or missing files as undefined
+        })
+        .refine(
+            (file) =>
+                !file ||
+                ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+            {
+                message: "Failas turi būti .jpg, .png arba .webp formato",
+            }
+        )
+        .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
+            message: "Nuotrauka per didelė (maks. 5 MB)",
+        })
+        .optional(),
 });

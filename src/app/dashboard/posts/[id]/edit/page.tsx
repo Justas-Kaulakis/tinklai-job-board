@@ -23,6 +23,7 @@ export default async function EditJobPage({ params }: EditJobPageProps) {
             category: true,
             expiresAt: true,
             authorId: true,
+            image: true,
         },
     });
 
@@ -45,6 +46,7 @@ export default async function EditJobPage({ params }: EditJobPageProps) {
                     description: post.description,
                     category: post.category as any,
                     expiresAt: post.expiresAt.toISOString().split("T")[0],
+                    image: post.image,
                 }}
                 actionFn={async (prevState, formData) => {
                     "use server";

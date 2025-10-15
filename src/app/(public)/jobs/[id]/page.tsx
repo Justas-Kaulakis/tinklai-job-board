@@ -1,6 +1,5 @@
 import db from "@/lib/db";
 import { auth } from "@/lib/auth";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MessageForm } from "@/components/MessageForm";
@@ -8,6 +7,7 @@ import { formatDistanceToNow } from "date-fns";
 import { lt } from "date-fns/locale";
 import LoginPrompt from "@/components/LoginPrompt";
 import JobTypeTag from "@/components/JobTypeTag";
+import Image from "next/image";
 
 type JobDetailsProps = { params: Promise<{ id: string }> };
 
@@ -59,7 +59,7 @@ export default async function JobDetailsPage({ params }: JobDetailsProps) {
             {post.image && (
                 <div className="relative w-full h-64">
                     <Image
-                        src={post.image}
+                        src={`/${post.image}`}
                         alt={post.title}
                         fill
                         className="object-cover rounded-md"

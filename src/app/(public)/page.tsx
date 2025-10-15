@@ -72,7 +72,7 @@ export default async function HomePage({
                 {posts.length === 0 ? (
                     <p className="text-gray-500">Nerasta jokių skelbimų.</p>
                 ) : (
-                    <div className="grid pt-4 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="mx-auto max-w-6xl pt-4 grid gap-6 md:grid-cols-2">
                         {posts.map((p) => (
                             <JobCard
                                 key={p.id}
@@ -87,6 +87,7 @@ export default async function HomePage({
                                         : undefined
                                 }
                                 expiresAt={p.expiresAt}
+                                image={p.image}
                             />
                         ))}
                     </div>

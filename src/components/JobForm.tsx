@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import type { JobFormState } from "@/lib/actions/jobs";
 import { toast } from "sonner";
@@ -14,6 +14,7 @@ interface JobFormProps {
         description?: string;
         category?: "OFFER" | "WANTED";
         expiresAt?: string;
+        image?: string | null;
     };
     actionFn: (
         prevState: JobFormState,
@@ -34,14 +35,22 @@ function SubmitButton({ label }: { label: string }) {
     );
 }
 
-export function JobForm({ mode, initialValues, actionFn }: JobFormProps) {
+export function JobForm({
+    mode,
+    postId,
+    initialValues,
+    actionFn,
+}: JobFormProps) {
     const initialState: JobFormState = { ok: false };
     const [state, formAction] = useActionState(actionFn, initialState);
+    const [preview, setPreview] = useState<string | null>(
+        initialValues?.image ? `/${initialValues.image}` : null
+    );
     const router = useRouter();
 
     useEffect(() => {
         if (state.ok) {
-            if (mode == "create") {
+            if (mode === "create") {
                 toast.success("Skelbimas sėkmingai paskelbtas");
                 setTimeout(() => {
                     router.push(`/dashboard/posts/${state.newPostId}/edit`);
@@ -50,10 +59,16 @@ export function JobForm({ mode, initialValues, actionFn }: JobFormProps) {
         } else if (state.formError) {
             toast.error(state.formError);
         }
-    }, [state]);
+    }, [state, mode, router]);
 
     return (
         <form action={formAction} className="space-y-4">
+            {/* Hidden jobId for edit mode */}
+            {mode === "edit" && postId && (
+                <input type="hidden" name="jobId" value={postId} />
+            )}
+
+            {/* --- TITLE --- */}
             <div>
                 <label className="block text-sm font-medium">Pavadinimas</label>
                 <input
@@ -69,6 +84,7 @@ export function JobForm({ mode, initialValues, actionFn }: JobFormProps) {
                 )}
             </div>
 
+            {/* --- DESCRIPTION --- */}
             <div>
                 <label className="block text-sm font-medium">Aprašymas</label>
                 <textarea
@@ -84,6 +100,7 @@ export function JobForm({ mode, initialValues, actionFn }: JobFormProps) {
                 )}
             </div>
 
+            {/* --- CATEGORY --- */}
             <div>
                 <label className="block text-sm font-medium">Kategorija</label>
                 <select
@@ -101,6 +118,7 @@ export function JobForm({ mode, initialValues, actionFn }: JobFormProps) {
                 )}
             </div>
 
+            {/* --- EXPIRES AT --- */}
             <div>
                 <label className="block text-sm font-medium">Galioja iki</label>
                 <input
@@ -116,6 +134,60 @@ export function JobForm({ mode, initialValues, actionFn }: JobFormProps) {
                 )}
             </div>
 
+            {/* --- IMAGE UPLOAD --- */}
+            <div>
+                <label className="block text-sm font-medium">Nuotrauka</label>
+
+                {preview ? (
+                    <div className="space-y-2">
+                        <img
+                            src={preview}
+                            alt="Peržiūra"
+                            className="w-48 h-auto rounded border"
+                        />
+                        {mode === "edit" && (
+                            <label className="flex items-center gap-2 text-sm">
+                                <input
+                                    type="checkbox"
+                                    name="removeImage"
+                                    value="true"
+                                />
+                                Pašalinti nuotrauką
+                            </label>
+                        )}
+                    </div>
+                ) : (
+                    <p className="text-xs text-gray-500 mb-1">
+                        Pasirinkite nuotrauką (neprivaloma)
+                    </p>
+                )}
+
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    className="block w-full text-sm text-gray-700 border rounded p-1 mt-1"
+                    onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = () =>
+                                setPreview(reader.result as string);
+                            reader.readAsDataURL(file);
+                        } else {
+                            setPreview(null);
+                        }
+                    }}
+                />
+
+                {state.fieldErrors?.image?.[0] && (
+                    <p className="text-xs text-red-600 mt-1">
+                        {state.fieldErrors.image[0]}
+                    </p>
+                )}
+            </div>
+
+            {/* --- FORM ERRORS --- */}
             {state.formError && (
                 <p className="text-sm text-red-600">{state.formError}</p>
             )}
