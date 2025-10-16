@@ -1,6 +1,6 @@
 # railway.toml
 [build]
-buildCommand = "npm run build"
+buildCommand = "npm run db:generate && npm run build"
 
 [deploy]
 # Run Prisma migrations before starting your app
