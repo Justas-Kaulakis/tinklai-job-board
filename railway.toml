@@ -1,0 +1,14 @@
+# railway.toml
+[build]
+buildCommand = "npm run build"
+
+[deploy]
+# Run Prisma migrations before starting your app
+preDeployCommand = "npx prisma db:migrate-deploy"
+
+# Your app entry point
+startCommand = "npm run start"
+
+# Healthcheck settings (optional but good for Next.js)
+healthcheckPath = "/"
+healthcheckTimeout = 15
