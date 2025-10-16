@@ -57,7 +57,7 @@ export function JobCard({
                         <JobTypeTag category={category} />
                     </div>
 
-                    <p className="text-sm hidden md:block   text-gray-700 line-clamp-2 mt-1">
+                    <p className="text-sm text-gray-700 line-clamp-1 lg:line-clamp-2">
                         {description}
                     </p>
                 </div>
