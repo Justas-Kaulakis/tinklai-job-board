@@ -8,9 +8,8 @@ import { executeFormAction } from "./executeFormAction";
 import { z } from "zod";
 import type { FormState } from "./formStates";
 import { jobSchema } from "../validation";
-import { processImageUpload } from "../image";
+import { processImageUpload, resolveImagePath } from "../image";
 import fs from "fs/promises";
-import path from "path";
 import { JobPost } from "@prisma/client";
 
 // ---------------------------
@@ -62,12 +61,10 @@ export async function createJobAction(
             revalidatePath("/dashboard/posts");
         }
     );
-    if (result.ok && newPost?.id)
-        return {
-            ...result,
-            newPostId: newPost.id,
-        };
-    else return result;
+
+    if (result.ok && newPost?.id) {
+        return { ...result, newPostId: newPost.id };
+    } else return result;
 }
 
 /**
@@ -90,19 +87,18 @@ export async function updateJobAction(
         if (
             existing.authorId !== session.user.id &&
             session.user.role !== "ADMIN"
-        )
+        ) {
             throw new Error("Neturite teisės redaguoti šio skelbimo.");
+        }
 
         let imagePath = existing.image; // keep old by default
         const file = formData.get("image");
 
-        // 1. New file uploaded → replace image
+        // 1️⃣ New file uploaded → replace image
         if (file && file instanceof File && file.size > 0) {
             if (existing.image) {
                 try {
-                    await fs.unlink(
-                        path.join(process.cwd(), "public", existing.image)
-                    );
+                    await fs.unlink(await resolveImagePath(existing.image));
                 } catch {
                     console.warn("Old image not found for deletion");
                 }
@@ -110,19 +106,18 @@ export async function updateJobAction(
             imagePath = await processImageUpload(file);
         }
 
-        // 🟠 2. Optional “remove” flag → clear image
+        // 2️⃣ Optional “remove” flag → clear image
         const removeImage = formData.get("removeImage") === "true";
         if (removeImage && existing.image) {
             try {
-                await fs.unlink(
-                    path.join(process.cwd(), "public", existing.image)
-                );
+                await fs.unlink(await resolveImagePath(existing.image));
             } catch {
                 console.warn("Could not remove image file");
             }
             imagePath = null;
         }
 
+        // 3️⃣ Update record
         await db.jobPost.update({
             where: { id: postId },
             data: {
@@ -152,13 +147,27 @@ export async function deleteJob(postId: string) {
             const session = await auth();
             if (!session?.user) throw new Error("Turite prisijungti.");
 
-            const post = await db.jobPost.findUnique({ where: { id: postId } });
+            const post = await db.jobPost.findUnique({
+                where: { id: postId },
+                select: { authorId: true, image: true },
+            });
             if (!post) throw new Error("Skelbimas nerastas.");
             if (
                 post.authorId !== session.user.id &&
-                session.user.role !== "ADMIN"
-            )
+                session.user.role !== "ADMIN" &&
+                session.user.role !== "CONTROLLER"
+            ) {
                 throw new Error("Neturite teisės ištrinti šio skelbimo.");
+            }
+
+            // 🗑 Delete image if it exists
+            if (post.image) {
+                try {
+                    await fs.unlink(await resolveImagePath(post.image));
+                } catch {
+                    console.warn("Could not remove image file");
+                }
+            }
 
             await db.jobPost.delete({ where: { id: postId } });
 
