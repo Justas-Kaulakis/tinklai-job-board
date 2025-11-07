@@ -27,7 +27,9 @@ async function ensureUploadDir() {
  * Given DB path like: "uploads/xxxx.webp"
  * Return FULL system path for deletion.
  */
-export function resolveImagePath(dbRelativePath: string): string {
+export async function resolveImagePath(
+    dbRelativePath: string
+): Promise<string> {
     return path.join(UPLOAD_DIR, path.basename(dbRelativePath));
 }
 
