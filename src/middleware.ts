@@ -1,5 +1,9 @@
-import { auth } from "@/lib/auth";
+// import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import authConfig from "./lib/auth.config";
+
+const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
     const { nextUrl } = req;
@@ -30,4 +34,5 @@ export default auth((req) => {
 
 export const config = {
     matcher: ["/admin/:path*", "/controller/:path*", "/dashboard/:path*"],
+    runtime: "nodejs",
 };
