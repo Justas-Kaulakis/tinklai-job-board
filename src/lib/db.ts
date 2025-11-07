@@ -30,7 +30,7 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = globalThis.prisma ?? new PrismaClient({ adapter });
 
 if (process.env.NODE_ENV !== "production") {
-    (globalThis as any).prisma = prisma;
+    (globalThis as any).prisma = prisma; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export default prisma;
