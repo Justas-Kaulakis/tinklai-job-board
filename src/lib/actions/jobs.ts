@@ -98,7 +98,7 @@ export async function updateJobAction(
         if (file && file instanceof File && file.size > 0) {
             if (existing.image) {
                 try {
-                    await fs.unlink(await resolveImagePath(existing.image));
+                    await fs.unlink(resolveImagePath(existing.image));
                 } catch {
                     console.warn("Old image not found for deletion");
                 }
@@ -110,7 +110,7 @@ export async function updateJobAction(
         const removeImage = formData.get("removeImage") === "true";
         if (removeImage && existing.image) {
             try {
-                await fs.unlink(await resolveImagePath(existing.image));
+                await fs.unlink(resolveImagePath(existing.image));
             } catch {
                 console.warn("Could not remove image file");
             }
