@@ -45,7 +45,7 @@ export function JobForm({
     const initialState: JobFormState = { ok: false };
     const [state, formAction] = useActionState(actionFn, initialState);
     const [preview, setPreview] = useState<string | null>(
-        initialValues?.image ? `/${initialValues.image}` : null
+        initialValues?.image ? `/api/${initialValues.image}` : null
     );
     const router = useRouter();
 

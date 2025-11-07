@@ -34,7 +34,7 @@ export function JobCard({
             <div className="relative  w-40 h-24 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
                 {image ? (
                     <Image
-                        src={`/${image}`}
+                        src={`/api/${image}`}
                         alt={title}
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"

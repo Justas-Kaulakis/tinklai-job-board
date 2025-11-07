@@ -58,7 +58,7 @@ export default async function JobDetailsPage({ params }: JobDetailsProps) {
             {post.image && (
                 <div className="relative w-full h-64">
                     <Image
-                        src={`/${post.image}`}
+                        src={`/api/${post.image}`}
                         alt={post.title}
                         fill
                         className="object-cover rounded-md"
