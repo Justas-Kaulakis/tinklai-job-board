@@ -9,9 +9,9 @@ const UPLOAD_ROOT = RAILWAY_VOLUME
 
 export async function GET(
     req: Request,
-    { params }: { params: { filename: string } }
+    { params }: { params: Promise<{ filename: string }> }
 ) {
-    const filePath = path.join(UPLOAD_ROOT, params.filename);
+    const filePath = path.join(UPLOAD_ROOT, (await params).filename);
 
     try {
         const file = await fs.readFile(filePath);
