@@ -183,7 +183,9 @@ async function main() {
             return db.user.create({
                 data: {
                     name: faker.person.fullName(),
-                    email: faker.internet.email({ provider: "example.com" }),
+                    email: faker.internet
+                        .email({ provider: "example.com" })
+                        .toLocaleLowerCase(),
                     password,
                     role: "CLIENT",
                     canPost: Math.random() < 0.7, // 70% of clients can post
