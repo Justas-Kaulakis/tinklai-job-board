@@ -41,7 +41,7 @@ export async function signInAction(
 ): Promise<AuthFormState> {
     return executeFormAction(formData, loginSchema, async (parsed) => {
         await signIn("credentials", {
-            email: parsed.email,
+            email: parsed.email.toLocaleLowerCase(),
             password: parsed.password,
             redirect: false,
         });
