@@ -38,6 +38,7 @@ export async function resolveImagePath(
  * Returns DB path like: "uploads/xxxx.webp"
  */
 export async function processImageUpload(file: File): Promise<string> {
+    console.log("runtime:", process.env.NEXT_RUNTIME);
     await ensureUploadDir();
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -67,7 +68,12 @@ export async function processImageUpload(file: File): Promise<string> {
             { input: watermarkSmall, gravity: "southeast", blend: "over" },
         ])
         .webp({ quality: 75 })
-        .toFile(outputPath);
+        .toFile(outputPath, (err, info) => {
+            if (err) {
+                console.log("err while calling sharp().toFile(): ", err);
+                console.log("info: ", info);
+            }
+        });
 
     // Stored in DB — served via /api/uploads or static route
     return `uploads/${filename}`;

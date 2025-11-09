@@ -76,6 +76,7 @@ export async function updateJobAction(
     formData: FormData
 ): Promise<JobFormState> {
     return executeFormAction(formData, jobSchema, async (parsed) => {
+        console.log("updateJobAction runtime:", process.env.NEXT_RUNTIME);
         const session = await auth();
         if (!session?.user) throw new Error("Turite prisijungti.");
 
@@ -103,7 +104,11 @@ export async function updateJobAction(
                     console.warn("Old image not found for deletion");
                 }
             }
-            imagePath = await processImageUpload(file);
+            try {
+                imagePath = await processImageUpload(file);
+            } catch (err) {
+                console.error("❌ Klaida apdorojant paveikslėlį:", err);
+            }
         }
 
         // 2️⃣ Optional “remove” flag → clear image
