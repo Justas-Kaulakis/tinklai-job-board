@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Local development
+
 First, run the development server:
 
 ```bash
@@ -17,6 +19,23 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+### Run with Docker Compose
+
+If you prefer running the project inside Docker (e.g. on a virtual machine), a production-ready setup is available:
+
+```bash
+docker compose up --build
+```
+
+This command starts two containers:
+
+- `db`: PostgreSQL database seeded with demo data (user/password: `justas`/`justas`).
+- `web`: Next.js application served in production mode on [http://localhost:3000](http://localhost:3000).
+
+Environment variables from `.env` are automatically loaded. The database URL is overridden in `docker-compose.yml` to point at the `db` service. By default the database is re-seeded on every container start (data is reset); set `AUTO_DB_SEED=false` in the `web` service environment to skip this step.
+
+Uploaded files are stored in a named Docker volume (`uploads`) so that images survive container restarts.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
