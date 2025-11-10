@@ -29,12 +29,12 @@ const Header = ({
                             <span className="">Board</span>
                         </div>
                     </Link>
-                    {isAuthed && (
+                    {role === "CLIENT" && (
                         <Link
                             href="/dashboard"
                             className="text-sm hover:underline"
                         >
-                            Dashboard
+                            Skelbimų valdymas
                         </Link>
                     )}
                     {role === "CONTROLLER" /*|| role === "ADMIN"*/ && (
@@ -42,12 +42,12 @@ const Header = ({
                             href="/controller"
                             className="text-sm hover:underline"
                         >
-                            Controller
+                            Kontrolieriaus skydelis
                         </Link>
                     )}
                     {role === "ADMIN" && (
                         <Link href="/admin" className="text-sm hover:underline">
-                            Admin
+                            Admin skydelis
                         </Link>
                     )}
                 </nav>
@@ -69,7 +69,7 @@ const Header = ({
                                     type="submit"
                                     className="text-sm underline underline-offset-4"
                                 >
-                                    Sign out
+                                    Atsijungti
                                 </button>
                             </form>
                         </>
@@ -79,13 +79,13 @@ const Header = ({
                                 href="/sign-in"
                                 className="text-sm hover:underline"
                             >
-                                Sign in
+                                Prisijungti
                             </Link>
                             <Link
                                 href="/sign-up"
                                 className="text-sm hover:underline"
                             >
-                                Sign up
+                                Registruotis
                             </Link>
                         </>
                     )}

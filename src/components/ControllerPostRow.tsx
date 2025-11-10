@@ -47,7 +47,7 @@ export function ControllerPostRow({
                     locale: lt,
                 })}
             </td>
-            <td className="px-3 py-2 text-right flex justify-end gap-2">
+            <td className="px-3 py-2">
                 <Link
                     href={`/jobs/${post.id}`}
                     className="px-3 py-1 text-xs rounded border border-gray-300 hover:bg-gray-100"

@@ -9,6 +9,8 @@ interface EditJobPageProps {
     params: Promise<{ id: string }>;
 }
 
+export const runtime = "nodejs";
+
 export default async function EditJobPage({ params }: EditJobPageProps) {
     const session = await auth();
     const user = session?.user;

@@ -68,12 +68,7 @@ export async function processImageUpload(file: File): Promise<string> {
             { input: watermarkSmall, gravity: "southeast", blend: "over" },
         ])
         .webp({ quality: 75 })
-        .toFile(outputPath, (err, info) => {
-            if (err) {
-                console.log("err while calling sharp().toFile(): ", err);
-                console.log("info: ", info);
-            }
-        });
+        .toFile(outputPath);
 
     // Stored in DB — served via /api/uploads or static route
     return `uploads/${filename}`;

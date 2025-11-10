@@ -1,0 +1,117 @@
+{
+    "users": [
+        {
+            "name": "Administratorius",
+            "email": "admin@job.lt",
+            "role": "ADMIN",
+            "canPost": true
+        },
+        {
+            "name": "Kontrolierius",
+            "email": "kontrolierius@job.lt",
+            "role": "CONTROLLER",
+            "canPost": false
+        },
+        {
+            "name": "Jonas Jonaitis",
+            "email": "jonas@job.lt",
+            "role": "CLIENT",
+            "canPost": true
+        },
+        {
+            "name": "Ieva Petrauskaitė",
+            "email": "ieva@job.lt",
+            "role": "CLIENT",
+            "canPost": true
+        },
+        {
+            "name": "Gabija Paulavičiūtė",
+            "email": "gabija@job.lt",
+            "role": "CLIENT",
+            "canPost": true
+        },
+        {
+            "name": "Mantas Rimkus",
+            "email": "mantas@job.lt",
+            "role": "CLIENT",
+            "canPost": true
+        }
+    ],
+    "posts": [
+        {
+            "title": "Ieškau programuotojo darbui Kaune",
+            "category": "OFFER",
+            "authorEmail": "jonas@job.lt",
+            "expiresInDays": 30,
+            "description": "Įmonė plečiasi ir ieško motyvuoto Front-end programuotojo. Darbas su Next.js, React, TailwindCSS.\n\nDarbo pobūdis:\n• Realių projektų vystymas kartu su komanda.\n• UI komponentų kūrimas ir palaikymas.\n• Bendradarbiavimas su dizaineriais ir Back-end programuotojais.\n\nReikalavimai:\n• Bazinės JavaScript/TypeScript žinios.\n• Supratimas apie React komponentų ciklą.\n• Noras mokytis ir tobulėti.\n\nSiūlome:\n• Lankstų darbo grafiką.\n• Galimybę dirbti dalinai nuotoliniu.\n• Draugišką kolektyvą ir pagalbą tobulėjimui."
+        },
+        {
+            "title": "Ieškau darbo IT srityje (Junior)",
+            "category": "WANTED",
+            "authorEmail": "ieva@job.lt",
+            "expiresInDays": 20,
+            "description": "Baigiau Front-end programavimo kursus ir ieškau pirmosios darbo vietos. Galiu dirbti pilnu arba daliniu etatu.\n\nMoku:\n• HTML, CSS, JavaScript\n• React pagrindai\n• Git, Github\n\nEsu atsakinga, greitai mokausi, mėgstu dirbti komandoje. Labai laukiu galimybės prisidėti prie realių projektų."
+        },
+        {
+            "title": "Siūlau grafikės paslaugas",
+            "category": "OFFER",
+            "authorEmail": "gabija@job.lt",
+            "expiresInDays": 25,
+            "description": "Turiu 4 metų patirtį grafinio dizaino srityje.\n\nGaliu sukurti:\n• Logotipus\n• Reklaminius plakatus\n• Vizualus socialiniams tinklams\n• Infografikus\n\nDirbu greitai, kruopščiai ir pagal užsakovo poreikius."
+        },
+        {
+            "title": "Ieškau darbų kaip elektrikas",
+            "category": "WANTED",
+            "authorEmail": "mantas@job.lt",
+            "expiresInDays": 14,
+            "description": "Atlieku įvairius elektros instaliacijos darbus. Patirtis 7 metai, darbai atliekami kokybiškai ir atsakingai.\n\nGaliu:\n• Keisti elektros instaliaciją butuose\n• Tvarkyti kištukus, jungiklius, šviestuvus\n• Konsultuoti dėl elektros saugos\n\nDirbu visoje Kauno apskrityje."
+        },
+        {
+            "title": "Ieškau patyrusio konditerio Vilniuje",
+            "category": "OFFER",
+            "authorEmail": "gabija@job.lt",
+            "expiresInDays": 18,
+            "description": "Ieškome konditerio prisijungti prie mūsų mažos kepyklėlės Senamiestyje.\n\nDarbo pobūdis:\n• Tortų, pyragų ir desertų gamyba nuo pradžių\n• Receptų kūrimas ir tobulinimas\n• Švaros ir tvarkos palaikymas darbo vietoje\n\nReikalavimai:\n• Patirtis konditerijoje – privalumas\n• Kūrybiškumas ir estetikos jausmas\n• Greita orientacija ir atsakingumas\n\nSiūlome:\n• Jaukią aplinką ir šiltą komandą\n• Lankstų darbo grafiką\n• Konkurencingą atlyginimą ir arbatpinigius kavinėje"
+        },
+        {
+            "title": "Ieškau praktikos UI/UX dizaino srityje",
+            "category": "WANTED",
+            "authorEmail": "ieva@job.lt",
+            "expiresInDays": 21,
+            "description": "Šiuo metu studijuoju multimedijos dizainą ir ieškau galimybės įgyti praktikos UI/UX srityje.\n\nMoku:\n• Figma (wireframe'ų, prototipų kūrimas)\n• Adobe Illustrator / Photoshop pagrindai\n• Atliekant vartotojų poreikių analizę\n\nEsu motyvuota, kruopšti ir noriu praktinės patirties realiuose produktuose. Galiu dirbti 15–30 val. per savaitę."
+        },
+        {
+            "title": "Siūlau namų tvarkymo paslaugas Kaune",
+            "category": "OFFER",
+            "authorEmail": "mantas@job.lt",
+            "expiresInDays": 10,
+            "description": "Tvarkau butus ir namus Kaune bei aplink. Patirtis 3 metai, dirbu atsakingai ir kruopščiai.\n\nPaslaugos:\n• Bendras valymas\n• Langų plovimas\n• Giluminis virtuvės ir vonios valymas\n• Lyginimas\n\nAtvyksiu su savo priemonėmis. Kainos priklauso nuo objekto dydžio ir užduočių."
+        },
+        {
+            "title": "Ieškau darbo automobilio mechaniko srityje",
+            "category": "WANTED",
+            "authorEmail": "jonas@job.lt",
+            "expiresInDays": 30,
+            "description": "Turiu 2 metų patirtį autoservise. Atlieku bazinę automobilio diagnostiką ir remonto darbus.\n\nGaliu:\n• Keisti tepalus, filtrus\n• Keisti stabdžių kaladėles ir diskus\n• Tikrinti pakabą\n\nIeškau darbo visą darbo dieną Kaune arba Kauno rajone. Atviras mokytis naujų dalykų."
+        },
+        {
+            "title": "Siūlau privačias anglų kalbos pamokas",
+            "category": "OFFER",
+            "authorEmail": "gabija@job.lt",
+            "expiresInDays": 40,
+            "description": "Esu anglų kalbos mokytoja (C1 lygis), dirbu tiek su vaikais, tiek su suaugusiais.\n\nPamokų tipai:\n• Bendrinė anglų kalba\n• Kalbėjimo įgūdžių gerinimas\n• Pagalba ruošiantis egzaminams\n• Mokymasis per kasdienes temas ir situacijas\n\nPamokos vyksta internetu arba gyvai Kaune. Jaukiai, aiškiai ir kantriai."
+        }
+    ],
+    "messages": [
+        {
+            "postTitle": "Ieškau programuotojo darbui Kaune",
+            "senderEmail": "ieva@job.lt",
+            "content": "Sveiki, ar būtų galimybė dirbti nuotoliniu būdu?"
+        },
+        {
+            "postTitle": "Ieškau programuotojo darbui Kaune",
+            "senderEmail": "jonas@job.lt",
+            "content": "Taip, galima derinti darbo grafiką ir nuotolinį režimą."
+        }
+    ]
+}

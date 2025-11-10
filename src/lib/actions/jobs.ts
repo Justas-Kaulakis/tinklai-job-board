@@ -29,6 +29,13 @@ export async function createJobAction(
     _prevState: JobFormState,
     formData: FormData
 ): Promise<JobFormState> {
+    const file = formData.get("image");
+    let imagePath: string | undefined;
+
+    // ✅ Upload BEFORE touching Prisma
+    if (file && file instanceof File && file.size > 0) {
+        imagePath = await processImageUpload(file);
+    }
     let newPost: JobPost | undefined;
     const result = await executeFormAction(
         formData,
@@ -39,11 +46,11 @@ export async function createJobAction(
             if (!session.user.canPost)
                 throw new Error("Neturite teisės kurti skelbimų.");
 
-            let imagePath: string | undefined = undefined;
-            const file = formData.get("image");
-            if (file && file instanceof File && file.size > 0) {
-                imagePath = await processImageUpload(file);
-            }
+            // let imagePath: string | undefined = undefined;
+            // const file = parsed.image;
+            // if (file && file instanceof File && file.size > 0) {
+            //     imagePath = await processImageUpload(file);
+            // }
 
             newPost = await db.jobPost.create({
                 data: {
@@ -52,7 +59,7 @@ export async function createJobAction(
                     category: parsed.category,
                     expiresAt: new Date(parsed.expiresAt),
                     authorId: session.user.id,
-                    image: imagePath,
+                    image: imagePath ?? undefined,
                 },
             });
 
@@ -93,7 +100,7 @@ export async function updateJobAction(
         }
 
         let imagePath = existing.image; // keep old by default
-        const file = formData.get("image");
+        const file = parsed.image;
 
         // 1️⃣ New file uploaded → replace image
         if (file && file instanceof File && file.size > 0) {

@@ -81,7 +81,9 @@ export default async function JobDetailsPage({ params }: JobDetailsProps) {
                     </p>
                 )}
 
-                {session && !isOwner && <MessageForm postId={post.id} />}
+                {session && !isOwner && userId && (
+                    <MessageForm postId={post.id} />
+                )}
 
                 {isOwner && (
                     <p className="text-sm text-gray-500 mb-2">

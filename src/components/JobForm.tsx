@@ -73,6 +73,7 @@ export function JobForm({
             <div>
                 <label className="block text-sm font-medium">Pavadinimas</label>
                 <input
+                    required
                     name="title"
                     type="text"
                     defaultValue={initialValues?.title ?? ""}
@@ -89,6 +90,7 @@ export function JobForm({
             <div>
                 <label className="block text-sm font-medium">Aprašymas</label>
                 <textarea
+                    required
                     name="description"
                     rows={5}
                     defaultValue={initialValues?.description ?? ""}
@@ -123,6 +125,7 @@ export function JobForm({
             <div>
                 <label className="block text-sm font-medium">Galioja iki</label>
                 <input
+                    required
                     name="expiresAt"
                     type="date"
                     defaultValue={initialValues?.expiresAt ?? ""}
