@@ -1,0 +1,29 @@
+# Step 1: Build Stage
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# Copy only package files first for caching
+COPY package.json package-lock.json* ./
+RUN npm install --omit=dev
+
+# Now copy rest of project
+COPY . .
+
+# Generate prisma client & build Next.js
+RUN npx prisma generate
+RUN npm run build
+
+# Step 2: Runtime Stage
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+
+# Copy only necessary output (built app + prisma client)
+COPY --from=builder /app /app
+
+# Ensure uploads directory exists in container (later bound to volume)
+RUN mkdir -p /app/data/uploads
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]

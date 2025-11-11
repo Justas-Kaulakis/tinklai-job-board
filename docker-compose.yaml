@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: jobboard_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: justas
+      POSTGRES_PASSWORD: justas
+      POSTGRES_DB: jobboard
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: jobboard_web
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: "postgresql://justas:justas@db:5432/jobboard"
+      AUTH_SECRET: "YOUR_SECRET_HERE"
+      AUTH_TRUST_HOST: "true"
+      UPLOAD_ROOT: "/app/data/uploads"
+      WATERMARK_PATH: "public/watermark.png"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/uploads:/app/data/uploads  # persist uploaded images
+
+volumes:
+  pgdata:
