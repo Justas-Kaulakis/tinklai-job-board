@@ -66,7 +66,6 @@ export async function createDeletionRequest(messageId: string) {
                 data: {
                     messageId,
                     requestedById: userId,
-                    postId: message.postId,
                 },
             });
 

@@ -81,12 +81,10 @@ model MessageDeletionRequest {
   requestedById String
   requestedBy   User   @relation(fields: [requestedById], references: [id], onDelete: Cascade)
 
-  postId String
-  post   JobPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-
   createdAt DateTime @default(now())
+  jobPost   JobPost? @relation(fields: [jobPostId], references: [id])
+  jobPostId String?
 
   @@index([messageId])
   @@index([requestedById])
-  @@index([postId])
 }
