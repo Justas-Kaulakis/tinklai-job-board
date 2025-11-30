@@ -47,6 +47,20 @@ export default async function RootLayout({
                     </main>
                 </SessionProvider>
                 <Toaster richColors position="bottom-center" />
+                <footer className="mt-12 border-t bg-gray-50">
+                    <div className="container mx-auto px-4 py-6 text-center text-sm text-gray-500">
+                        <p>
+                            © {new Date().getFullYear()} Tinklai Job Board.
+                            Visos teisės saugomos.
+                        </p>
+                        <p>
+                            <b>
+                                "T120B145 Kompiuterių tinklai ir internetinės
+                                technologijos" IT projektas
+                            </b>
+                        </p>
+                    </div>
+                </footer>
             </body>
         </html>
     );
