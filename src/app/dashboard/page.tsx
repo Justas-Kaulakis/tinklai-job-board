@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteJob } from "@/lib/actions/jobs";
 import JobTypeTag from "@/components/JobTypeTag";
+import PostMessages from "@/components/PostMessages";
 
 export default async function DashboardPage() {
     const session = await auth();
@@ -24,6 +25,21 @@ export default async function DashboardPage() {
             db.jobPost.findMany({
                 where: { authorId: user.id },
                 orderBy: { createdAt: "desc" },
+                include: {
+                    messages: {
+                        include: {
+                            sender: {
+                                select: { id: true, name: true, email: true },
+                            },
+                            _count: {
+                                select: {
+                                    messageDeletionRequests: true,
+                                },
+                            },
+                        },
+                        orderBy: { createdAt: "desc" },
+                    },
+                },
             }),
         ]);
 
@@ -85,53 +101,65 @@ export default async function DashboardPage() {
                 ) : (
                     <ul className="space-y-3">
                         {posts.map((post) => (
-                            <li
-                                key={post.id}
-                                className="border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between"
-                            >
-                                <div>
-                                    <h3 className="font-medium">
-                                        {post.title}
-                                    </h3>
-                                    <p className="text-sm text-gray-600">
-                                        galioja iki{" "}
-                                        {new Date(
-                                            post.expiresAt
-                                        ).toLocaleDateString("lt-LT")}
-                                    </p>
-                                    <JobTypeTag category={post.category} />
-                                    <p className="text-xs text-gray-400 pl-2 inline">
-                                        Peržiūros: {post.views ?? 0}
-                                    </p>
+                            <li key={post.id} className="border rounded-lg p-4">
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                    <div>
+                                        <h3 className="font-medium hover:text-blue-600 hover:underline">
+                                            <a href={`/jobs/${post.id}`}>
+                                                {post.title}
+                                            </a>
+                                        </h3>
+                                        <p className="text-sm text-gray-600">
+                                            galioja iki{" "}
+                                            {new Date(
+                                                post.expiresAt
+                                            ).toLocaleDateString("lt-LT")}
+                                        </p>
+
+                                        <div className="flex items-center gap-2">
+                                            <JobTypeTag
+                                                category={post.category}
+                                            />
+                                            <p className="text-xs text-gray-400 pl-2">
+                                                Peržiūros: {post.views ?? 0}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-3 sm:mt-0 flex items-center gap-2">
+                                        <Link
+                                            href={`/jobs/${post.id}`}
+                                            className="text-sm px-3 py-1 border rounded hover:bg-gray-50"
+                                        >
+                                            Peržiūrėti
+                                        </Link>
+                                        <Link
+                                            href={`/dashboard/posts/${post.id}/edit`}
+                                            className="text-sm px-3 py-1 border rounded hover:bg-gray-50"
+                                        >
+                                            Redaguoti
+                                        </Link>
+                                        <form
+                                            action={async () => {
+                                                "use server";
+                                                await deleteJob(post.id);
+                                            }}
+                                        >
+                                            <button
+                                                type="submit"
+                                                className="text-sm px-3 py-1 text-red-600 border border-red-300 rounded hover:bg-red-50"
+                                            >
+                                                Ištrinti
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
 
-                                <div className="mt-3 sm:mt-0 flex items-center gap-2">
-                                    <Link
-                                        href={`/jobs/${post.id}`}
-                                        className="text-sm px-3 py-1 border rounded hover:bg-gray-50"
-                                    >
-                                        Peržiūrėti
-                                    </Link>
-                                    <Link
-                                        href={`/dashboard/posts/${post.id}/edit`}
-                                        className="text-sm px-3 py-1 border rounded hover:bg-gray-50"
-                                    >
-                                        Redaguoti
-                                    </Link>
-                                    <form
-                                        action={async () => {
-                                            "use server";
-                                            await deleteJob(post.id);
-                                        }}
-                                    >
-                                        <button
-                                            type="submit"
-                                            className="text-sm px-3 py-1 text-red-600 border border-red-300 rounded hover:bg-red-50"
-                                        >
-                                            Ištrinti
-                                        </button>
-                                    </form>
-                                </div>
+                                {/* 🔽 NEW: message dropdown */}
+                                <PostMessages
+                                    messages={post.messages}
+                                    userId={user.id}
+                                />
                             </li>
                         ))}
                     </ul>

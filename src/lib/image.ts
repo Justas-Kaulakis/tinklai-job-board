@@ -38,7 +38,7 @@ export async function resolveImagePath(
  * Returns DB path like: "uploads/xxxx.webp"
  */
 export async function processImageUpload(file: File): Promise<string> {
-    console.log("runtime:", process.env.NEXT_RUNTIME);
+    // console.log("runtime:", process.env.NEXT_RUNTIME);
     await ensureUploadDir();
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -54,7 +54,7 @@ export async function processImageUpload(file: File): Promise<string> {
     const width = meta.width ?? 800;
 
     // Resize watermark to ~10% width
-    const watermarkWidth = Math.max(1, Math.round(width * 0.1));
+    const watermarkWidth = Math.max(1, Math.round(width * 0.2));
     const watermarkSmall = await sharp(watermarkBuf)
         .resize({ width: watermarkWidth })
         .toBuffer();
@@ -64,9 +64,7 @@ export async function processImageUpload(file: File): Promise<string> {
     const outputPath = path.join(UPLOAD_DIR, filename);
 
     await sharp(resizedImage)
-        .composite([
-            { input: watermarkSmall, gravity: "southeast", blend: "over" },
-        ])
+        .composite([{ input: watermarkSmall, gravity: "east", blend: "over" }])
         .webp({ quality: 75 })
         .toFile(outputPath);
 

@@ -83,7 +83,7 @@ export async function updateJobAction(
     formData: FormData
 ): Promise<JobFormState> {
     return executeFormAction(formData, jobSchema, async (parsed) => {
-        console.log("updateJobAction runtime:", process.env.NEXT_RUNTIME);
+        // console.log("updateJobAction runtime:", process.env.NEXT_RUNTIME);
         const session = await auth();
         if (!session?.user) throw new Error("Turite prisijungti.");
 

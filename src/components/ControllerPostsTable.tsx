@@ -13,7 +13,6 @@ import { deleteJob } from "@/lib/actions/jobs";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { lt } from "date-fns/locale";
-import Link from "next/link";
 import { Prisma } from "@prisma/client";
 
 type Post = Prisma.JobPostGetPayload<{
@@ -27,7 +26,14 @@ export function ControllerPostsTable({ posts }: { posts: Post[] }) {
         {
             accessorKey: "title",
             header: "Pavadinimas",
-            cell: ({ row }) => row.original.title,
+            cell: ({ row }) => (
+                <a
+                    className="text-blue-600 underline"
+                    href={`/jobs/${row.original.id}`}
+                >
+                    {row.original.title}
+                </a>
+            ),
         },
         {
             accessorKey: "author.name",
@@ -64,19 +70,19 @@ export function ControllerPostsTable({ posts }: { posts: Post[] }) {
                     locale: lt,
                 }),
         },
-        {
-            id: "view",
-            header: "Peržiūrėti",
-            cell: ({ row }) => (
-                <Link
-                    href={`/jobs/${row.original.id}`}
-                    className="px-3 py-1 text-xs rounded border border-gray-300 hover:bg-gray-100"
-                >
-                    Atidaryti
-                </Link>
-            ),
-            enableSorting: false,
-        },
+        // {
+        //     id: "view",
+        //     header: "Peržiūrėti",
+        //     cell: ({ row }) => (
+        //         <Link
+        //             href={`/jobs/${row.original.id}`}
+        //             className="px-3 py-1 text-xs rounded border border-gray-300 hover:bg-gray-100"
+        //         >
+        //             Atidaryti
+        //         </Link>
+        //     ),
+        //     enableSorting: false,
+        // },
         {
             id: "delete",
             header: "Ištrinti",

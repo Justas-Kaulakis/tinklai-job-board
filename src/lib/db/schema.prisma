@@ -23,8 +23,9 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  posts        JobPost[]
-  sentMessages Message[] @relation("UserSentMessages")
+  posts                   JobPost[]
+  sentMessages            Message[]                @relation("UserSentMessages")
+  messageDeletionRequests MessageDeletionRequest[]
 
   @@index([role])
 }
@@ -44,7 +45,8 @@ model JobPost {
   authorId String
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  messages Message[] @relation("PostMessages")
+  messages                Message[]                @relation("PostMessages")
+  messageDeletionRequests MessageDeletionRequest[]
 
   @@index([category, expiresAt])
   @@index([authorId])
@@ -63,6 +65,28 @@ model Message {
   senderId String
   sender   User   @relation("UserSentMessages", fields: [senderId], references: [id], onDelete: Cascade)
 
+  // flaggedForDeletion Boolean @default(false)
+  messageDeletionRequests MessageDeletionRequest[]
+
   @@index([postId])
   @@index([senderId])
+}
+
+model MessageDeletionRequest {
+  id String @id @default(cuid())
+
+  messageId String
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  requestedById String
+  requestedBy   User   @relation(fields: [requestedById], references: [id], onDelete: Cascade)
+
+  postId String
+  post   JobPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([messageId])
+  @@index([requestedById])
+  @@index([postId])
 }

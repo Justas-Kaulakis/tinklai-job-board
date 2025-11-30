@@ -36,10 +36,10 @@ export default async function EditJobPage({ params }: EditJobPageProps) {
         redirect("/dashboard/posts");
     }
 
-    console.log("DATABASE_URL: ", process.env.DATABASE_URL);
-    console.log("AUTH_TRUST_HOST: ", process.env.AUTH_TRUST_HOST);
-    console.log("AUTH_SECRET: ", process.env.AUTH_SECRET);
-    console.log("UPLOAD_ROOT: ", process.env.UPLOAD_ROOT);
+    // console.log("DATABASE_URL: ", process.env.DATABASE_URL);
+    // console.log("AUTH_TRUST_HOST: ", process.env.AUTH_TRUST_HOST);
+    // console.log("AUTH_SECRET: ", process.env.AUTH_SECRET);
+    // console.log("UPLOAD_ROOT: ", process.env.UPLOAD_ROOT);
 
     return (
         <section className="max-w-2xl mx-auto space-y-6">

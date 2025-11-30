@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { ControllerPostRow } from "@/components/ControllerPostRow";
 import { ControllerPostsTable } from "@/components/ControllerPostsTable";
+import { ControllerDeletionRequestsTable } from "@/components/ControllerDeletionRequestsTable";
 
 export default async function ControllerPage() {
     const session = await auth();
@@ -10,6 +10,20 @@ export default async function ControllerPage() {
     // Get all job posts with author info
     const posts = await db.jobPost.findMany({
         include: { author: { select: { name: true, email: true } } },
+        orderBy: { createdAt: "desc" },
+    });
+
+    // Get message deletion requests
+    const deletionRequests = await db.messageDeletionRequest.findMany({
+        include: {
+            message: {
+                include: {
+                    sender: { select: { name: true, email: true } },
+                    post: { select: { id: true, title: true } },
+                },
+            },
+            requestedBy: { select: { name: true, email: true } },
+        },
         orderBy: { createdAt: "desc" },
     });
 
@@ -27,6 +41,21 @@ export default async function ControllerPage() {
             ) : (
                 <ControllerPostsTable posts={posts} />
             )}
+            <div>
+                <h2 className="text-xl font-semibold mt-10">
+                    Žinučių trynimo užklausos
+                </h2>
+
+                {deletionRequests.length === 0 ? (
+                    <p className="text-gray-500 text-sm mt-2">
+                        Nėra pažymėtų žinučių.
+                    </p>
+                ) : (
+                    <ControllerDeletionRequestsTable
+                        requests={deletionRequests}
+                    />
+                )}
+            </div>
         </section>
     );
 }

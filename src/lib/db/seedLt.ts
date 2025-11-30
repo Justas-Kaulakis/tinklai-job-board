@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import fs from "fs";
 import seedData from "./seedData.json";
 
 const db = new PrismaClient();

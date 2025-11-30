@@ -7,11 +7,12 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "db:migrate": "dotenv -e .env.development  -- npx prisma migrate dev",
-        "db:generate": "dotenv -e .env.development -- npx prisma generate",
-        "db:studio": "dotenv -e .env.development  -- npx prisma studio",
-        "db:reset": "dotenv -e .env.development  -- npx prisma migrate reset",
-        "db:seed": "dotenv -e .env.development -- npx prisma db seed",
+        "comment": "dotenv -e .env.development",
+        "db:migrate": "dotenv -e .env -- npx prisma migrate dev",
+        "db:generate": "npx prisma generate",
+        "db:studio": " npx prisma studio",
+        "db:reset": " npx prisma migrate reset",
+        "db:seed": "npx prisma db seed",
         "db:migrate-deploy": "npx prisma migrate deploy"
     },
     "dependencies": {

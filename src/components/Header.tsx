@@ -13,6 +13,8 @@ const Header = ({
     canPost: boolean;
     email?: string;
 }) => {
+    // console.log("is authed: ", isAuthed);
+
     return (
         <header className="border-b">
             <div className="container mx-auto px-4 h-14 flex items-center justify-between">

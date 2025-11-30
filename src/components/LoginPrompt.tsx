@@ -7,7 +7,7 @@ const LoginPrompt = () => {
     const pathname = usePathname();
     const search = useSearchParams().toString();
     const callbackUrl = `${pathname}${search ? `?${search}` : ""}`;
-    console.log(callbackUrl);
+    // console.log(callbackUrl);
     return (
         <Link
             href={{

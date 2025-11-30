@@ -15,6 +15,13 @@ export default async function JobDetailsPage({ params }: JobDetailsProps) {
     const userId = session?.user.id;
     const postId = (await params).id;
 
+    const existing = await db.jobPost.findUnique({
+        where: { id: postId },
+        select: { id: true },
+    });
+
+    if (!existing) return notFound();
+
     const post = await db.jobPost.update({
         where: { id: postId },
         data: { views: { increment: 1 } },
@@ -28,8 +35,6 @@ export default async function JobDetailsPage({ params }: JobDetailsProps) {
             },
         },
     });
-
-    if (!post) return notFound();
 
     const isOwner = userId === post.authorId;
 
@@ -81,9 +86,7 @@ export default async function JobDetailsPage({ params }: JobDetailsProps) {
                     </p>
                 )}
 
-                {session && !isOwner && userId && (
-                    <MessageForm postId={post.id} />
-                )}
+                {session && userId && <MessageForm postId={post.id} />}
 
                 {isOwner && (
                     <p className="text-sm text-gray-500 mb-2">

@@ -1,7 +1,7 @@
 // import { auth } from "@/lib/auth";
-import NextAuth from "next-auth";
+// import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import authConfig from "./lib/auth.config";
+// import authConfig from "./lib/auth.config";
 import { auth } from "./lib/auth";
 
 export default auth((req) => {
@@ -17,8 +17,8 @@ export default auth((req) => {
 
     // Admin area
     if (nextUrl.pathname.startsWith("/admin") && user.role !== "ADMIN") {
-        console.log("REDIRECTING BECAUSE USER IS NOT ADMIN!");
-        console.log("user: ", user);
+        // console.log("REDIRECTING BECAUSE USER IS NOT ADMIN!");
+        // console.log("user: ", user);
 
         return NextResponse.redirect(new URL("/", nextUrl));
     }

@@ -1,7 +1,8 @@
 import path from "node:path";
 import type { PrismaConfig } from "prisma";
+import "dotenv/config";
 
-const db = path.join("src", "lib", "db");
+const db = "./src/lib/db";
 
 export default {
     schema: path.join(db, "schema.prisma"),
