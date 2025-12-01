@@ -1,48 +1,22 @@
-/*
 import { PrismaClient } from "@prisma/client";
 
-const prismaClientSingleton = () => {
-    return new PrismaClient();
+const url = process.env.DATABASE_URL as string;
+
+// console.log({ cwd: process.cwd(), url });
+
+// const adapter = new PrismaBetterSQLite3({
+//     url,
+// });
+// const prisma = new PrismaClient({ adapter });
+
+// export default prisma;
+
+// Singleton for Next.js (dev hot-reload safe)
+const globalForPrisma = globalThis as unknown as {
+    db: PrismaClient | undefined;
 };
 
-declare const globalThis: {
-    prismaGlobal: ReturnType<typeof prismaClientSingleton>;
-} & typeof global;
-
-const db = globalThis.prismaGlobal ?? prismaClientSingleton();
-
-export default db;
-if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = db;
-*/
-
-// src/lib/db.ts
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import PG from "pg";
-
-declare global {
-    // Allow globalThis.prisma across the app
-    // but only in dev mode
-    var prisma: PrismaClient | undefined;
+if (!globalForPrisma.db) {
+    globalForPrisma.db = new PrismaClient({ datasourceUrl: url });
 }
-
-const connectionString = process.env.DATABASE_URL!;
-
-const pool = new PG.Pool({
-    connectionString,
-    max: 10,
-    idleTimeoutMillis: 30_000,
-    allowExitOnIdle: true,
-    // 👇 The important part
-    keepAlive: true,
-});
-
-const adapter = new PrismaPg(pool);
-// const adapter = new PrismaPg({ connectionString,  });
-const prisma = globalThis.prisma ?? new PrismaClient({ adapter });
-
-if (process.env.NODE_ENV !== "production") {
-    (globalThis as any).prisma = prisma; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
-export default prisma;
+export default globalForPrisma.db as PrismaClient;
